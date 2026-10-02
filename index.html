@@ -1,0 +1,860 @@
+<title>Омияге</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Jost:ital,wght@0,400;0,500;0,600;1,400&family=Zen+Antique&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: light;
+    --bg: #eef1f2;
+    --bg-soft: #e4e8ea;
+    --surface: #ffffff;
+    --surface-sunk: #f6f3ec;
+    --fg: #1a2330;
+    --fg-muted: #5c6773;
+    --border: #d7dde0;
+    --indigo: #28415f;
+    --indigo-deep: #142535;
+    --indigo-ink: #0f1e2c;
+    --on-indigo: #eef1f2;
+    --hanko: #b23a2e;
+    --hanko-ink: #ffffff;
+    --focus: #1f6fb2;
+    --shadow: 0 10px 30px -18px rgba(20,37,53,0.45);
+    --ok: #2c6e4f;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme: dark;
+      --bg: #10161d;
+      --bg-soft: #161e26;
+      --surface: #1a232c;
+      --surface-sunk: #141b22;
+      --fg: #e9edef;
+      --fg-muted: #9aa7b0;
+      --border: #2a3540;
+      --indigo: #6f9bc4;
+      --indigo-deep: #0c1822;
+      --indigo-ink: #cfe0ef;
+      --on-indigo: #eef3f7;
+      --hanko: #d9594a;
+      --hanko-ink: #1a0604;
+      --focus: #7fc1ff;
+      --shadow: 0 10px 30px -14px rgba(0,0,0,0.6);
+      --ok: #7fcfa6;
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme: dark;
+    --bg: #10161d;
+    --bg-soft: #161e26;
+    --surface: #1a232c;
+    --surface-sunk: #141b22;
+    --fg: #e9edef;
+    --fg-muted: #9aa7b0;
+    --border: #2a3540;
+    --indigo: #6f9bc4;
+    --indigo-deep: #0c1822;
+    --indigo-ink: #cfe0ef;
+    --on-indigo: #eef3f7;
+    --hanko: #d9594a;
+    --hanko-ink: #1a0604;
+    --focus: #7fc1ff;
+    --shadow: 0 10px 30px -14px rgba(0,0,0,0.6);
+    --ok: #7fcfa6;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--fg);
+    font-family:'Jost', sans-serif;
+    font-size:16px;
+    line-height:1.55;
+    padding-inline:0;
+  }
+  img,svg{max-width:100%;}
+  a{color:inherit;}
+  h1,h2,h3{
+    font-family:'Tenor Sans', serif;
+    font-weight:400;
+    text-wrap:balance;
+    margin:0;
+    letter-spacing:.01em;
+  }
+  .jp{font-family:'Zen Antique', serif;}
+  button{font-family:inherit;}
+  :focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:4px;}
+  @media (prefers-reduced-motion:no-preference){
+    .cart-panel, .scrim, .card, .btn, .pill{transition:transform .25s ease, opacity .25s ease, background-color .2s ease, border-color .2s ease, box-shadow .2s ease;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+
+  .wrap{max-width:1120px;margin-inline:auto;padding-inline:20px;}
+  .eyebrow{
+    font-family:'Jost',sans-serif;
+    text-transform:uppercase;
+    letter-spacing:.14em;
+    font-size:.72rem;
+    color:var(--fg-muted);
+  }
+
+  /* header */
+  header.site{
+    position:sticky;top:env(safe-area-inset-top,0px);z-index:40;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px;}
+  .brand{display:flex;align-items:center;gap:12px;text-decoration:none;}
+  .hanko-mark{
+    width:40px;height:40px;border-radius:7px;background:var(--hanko);
+    color:var(--hanko-ink);display:flex;align-items:center;justify-content:center;
+    font-family:'Zen Antique',serif;font-size:1.4rem;flex:none;
+    box-shadow:var(--shadow);
+  }
+  .brand-name{font-family:'Tenor Sans',serif;font-size:1.3rem;letter-spacing:.03em;}
+  .cart-btn{
+    display:flex;align-items:center;gap:10px;background:var(--indigo);color:var(--on-indigo);
+    border:none;border-radius:999px;padding:10px 18px;font-size:.92rem;cursor:pointer;
+    box-shadow:var(--shadow);
+  }
+  .cart-btn:hover{filter:brightness(1.08);}
+  .cart-count{
+    background:var(--hanko);color:var(--hanko-ink);border-radius:999px;min-width:22px;height:22px;
+    display:inline-flex;align-items:center;justify-content:center;font-size:.76rem;padding-inline:5px;
+    font-variant-numeric:tabular-nums;
+  }
+
+  /* hero */
+  .hero{padding-block:48px 56px;}
+  .hero-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:36px;align-items:center;}
+  @media (max-width:760px){.hero-grid{grid-template-columns:1fr;}}
+  .hero h1{font-size:clamp(2.1rem,5vw,3.1rem);margin-block:14px 16px;}
+  .hero p.lead{color:var(--fg-muted);font-size:1.05rem;max-width:46ch;margin:0 0 22px;}
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap;}
+  .btn{
+    border:1px solid var(--border);background:var(--surface);color:var(--fg);
+    padding:11px 22px;border-radius:999px;font-size:.92rem;cursor:pointer;text-decoration:none;
+    display:inline-flex;align-items:center;gap:8px;
+  }
+  .btn.primary{background:var(--indigo);color:var(--on-indigo);border-color:transparent;box-shadow:var(--shadow);}
+  .btn.primary:hover{filter:brightness(1.08);}
+  .btn:hover{border-color:var(--indigo);}
+  .btn[disabled]{opacity:.45;cursor:not-allowed;}
+
+  .hero-art{
+    position:relative;background:var(--indigo-deep);border-radius:22px;overflow:hidden;
+    aspect-ratio:4/3;box-shadow:var(--shadow);
+  }
+  .hero-art .kanji-ghost{
+    position:absolute;right:-6%;top:-14%;font-family:'Zen Antique',serif;
+    font-size:min(16vw,230px);line-height:1;color:var(--on-indigo);opacity:.1;
+    writing-mode:vertical-rl;
+  }
+  .hero-art svg{position:absolute;inset:0;margin:auto;width:62%;height:62%;left:8%;top:18%;}
+
+  /* filter + catalog */
+  section{padding-block:40px;}
+  .section-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px;}
+  .filters{display:flex;gap:8px;flex-wrap:wrap;}
+  .pill{
+    border:1px solid var(--border);background:var(--surface);color:var(--fg-muted);
+    border-radius:999px;padding:8px 16px;font-size:.86rem;cursor:pointer;
+  }
+  .pill[aria-pressed="true"]{background:var(--indigo);color:var(--on-indigo);border-color:transparent;}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;}
+  .card{
+    background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;
+    display:flex;flex-direction:column;
+  }
+  .card-art{aspect-ratio:1/1;background:var(--surface-sunk);display:flex;align-items:center;justify-content:center;padding:14px;}
+  .card-art svg{width:100%;height:100%;}
+  .card-body{padding:16px 16px 18px;display:flex;flex-direction:column;gap:8px;flex:1;}
+  .card-title{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;}
+  .card-title h3{font-size:1.15rem;}
+  .card-jp{color:var(--fg-muted);font-size:.9rem;}
+  .card-meta{font-size:.82rem;color:var(--fg-muted);}
+  .card-desc{font-size:.88rem;color:var(--fg-muted);flex:1;}
+  .status{
+    align-self:flex-start;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;
+    border-radius:999px;padding:3px 10px;border:1px solid var(--border);
+  }
+  .status.in{color:var(--ok);border-color:var(--ok);}
+  .status.order{color:var(--hanko);border-color:var(--hanko);}
+  .card-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:4px;}
+  .price{font-family:'Tenor Sans',serif;font-size:1.2rem;font-variant-numeric:tabular-nums;}
+  .empty-note{color:var(--fg-muted);padding:24px 0;}
+
+  /* how to order */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  @media (max-width:700px){.steps{grid-template-columns:1fr;}}
+  .step{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;}
+  .step .num{font-family:'Tenor Sans',serif;color:var(--hanko);font-size:1.6rem;}
+
+  .about-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;}
+  @media (max-width:760px){.about-grid{grid-template-columns:1fr;}}
+  .about-grid p{color:var(--fg-muted);}
+  .ways{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:10px;}
+  .ways li{display:flex;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-size:.92rem;}
+
+  footer.site{border-top:1px solid var(--border);padding-block:28px;color:var(--fg-muted);font-size:.86rem;}
+  .foot-row{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+
+  /* cart panel */
+  .scrim{position:fixed;inset:0;background:rgba(10,16,22,.42);opacity:0;visibility:hidden;z-index:50;}
+  .scrim.open{opacity:1;visibility:visible;}
+  .cart-panel{
+    position:fixed;top:0;right:0;height:100%;width:min(420px,100%);background:var(--surface);
+    z-index:51;transform:translateX(100%);box-shadow:var(--shadow);
+    display:flex;flex-direction:column;
+    padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  .cart-panel.open{transform:translateX(0);}
+  .cart-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--border);}
+  .cart-head h2{font-size:1.2rem;}
+  .icon-btn{background:none;border:1px solid var(--border);border-radius:10px;width:36px;height:36px;cursor:pointer;color:var(--fg);font-size:1.1rem;line-height:1;}
+  .icon-btn:hover{border-color:var(--indigo);}
+  .cart-body{flex:1;overflow-y:auto;padding:16px 20px;}
+  .cart-foot{border-top:1px solid var(--border);padding:16px 20px;display:flex;flex-direction:column;gap:12px;}
+  .cart-total-row{display:flex;justify-content:space-between;font-family:'Tenor Sans',serif;font-size:1.1rem;}
+
+  .line{display:flex;gap:12px;padding-block:12px;border-bottom:1px solid var(--border);}
+  .line:last-child{border-bottom:none;}
+  .line-art{width:56px;height:56px;flex:none;background:var(--surface-sunk);border-radius:10px;padding:6px;}
+  .line-main{flex:1;min-width:0;}
+  .line-top{display:flex;justify-content:space-between;gap:8px;}
+  .line-name{font-size:.95rem;}
+  .line-price{font-size:.85rem;color:var(--fg-muted);font-variant-numeric:tabular-nums;}
+  .qty{display:flex;align-items:center;gap:8px;margin-top:8px;}
+  .qty button{width:26px;height:26px;border-radius:7px;border:1px solid var(--border);background:var(--surface);cursor:pointer;}
+  .qty span{min-width:1.6em;text-align:center;font-variant-numeric:tabular-nums;}
+  .remove-btn{background:none;border:none;color:var(--fg-muted);font-size:.8rem;cursor:pointer;text-decoration:underline;padding:0;margin-top:8px;}
+
+  .empty-cart{text-align:center;padding:40px 10px;color:var(--fg-muted);}
+
+  .field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+  .field label{font-size:.84rem;color:var(--fg-muted);}
+  .field input, .field select, .field textarea{
+    font-family:inherit;font-size:.95rem;padding:10px 12px;border-radius:10px;
+    border:1px solid var(--border);background:var(--surface-sunk);color:var(--fg);
+  }
+  .field textarea{resize:vertical;min-height:64px;}
+  .field .err{color:var(--hanko);font-size:.8rem;display:none;}
+  .field.invalid .err{display:block;}
+  .field.invalid input, .field.invalid select{border-color:var(--hanko);}
+
+  .order-text{
+    white-space:pre-wrap;font-size:.86rem;background:var(--surface-sunk);border:1px solid var(--border);
+    border-radius:10px;padding:12px;max-height:220px;overflow:auto;font-family:ui-monospace,monospace;
+  }
+  .notice{
+    background:color-mix(in srgb, var(--hanko) 12%, var(--surface));
+    border:1px solid var(--hanko);color:var(--fg);border-radius:10px;padding:10px 12px;font-size:.85rem;
+  }
+  .result-actions{display:flex;flex-direction:column;gap:10px;margin-top:14px;}
+  .copy-feedback{font-size:.82rem;color:var(--fg-muted);min-height:1.2em;}
+  .link-back{font-size:.86rem;text-align:center;text-decoration:underline;cursor:pointer;background:none;border:none;color:var(--fg-muted);}
+</style>
+
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="#catalog">
+      <span class="hanko-mark jp" aria-hidden="true">土</span>
+      <span class="brand-name">Омияге</span>
+    </a>
+    <button class="cart-btn" id="cart-toggle" aria-haspopup="dialog" aria-controls="cart-panel">
+      Корзина <span class="cart-count" id="cart-count">0</span>
+    </button>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">Ручная работа · Япония в каждой строчке</p>
+        <h1>Сумки омияге&nbsp;— сувенир, который носят каждый день</h1>
+        <p class="lead">Стёганые сумки из хлопка с подкладом и молнией, сшитые вручную в японских узорах. Выберите модель, оформите заказ — мастер подтвердит детали в переписке.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#catalog">Смотреть каталог</a>
+          <a class="btn" href="#how">Как заказать</a>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <span class="kanji-ghost jp">お土産</span>
+        <svg viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="hero-pat" width="22" height="22" patternUnits="userSpaceOnUse">
+              <rect width="22" height="22" fill="#cdd9e3"/>
+              <path d="M0 22a22 22 0 0 1 22-22" fill="none" stroke="#28415f" stroke-width="2"/>
+              <path d="M0 15a15 15 0 0 1 15-15" fill="none" stroke="#28415f" stroke-width="2"/>
+              <path d="M0 8a8 8 0 0 1 8-8" fill="none" stroke="#28415f" stroke-width="2"/>
+            </pattern>
+          </defs>
+          <path d="M34 60 Q34 34 66 34 H134 Q166 34 166 60 V146 Q166 168 142 168 H58 Q34 168 34 146 Z" fill="url(#hero-pat)" stroke="#142535" stroke-width="3"/>
+          <path d="M70 60 V46 Q70 24 100 24 Q130 24 130 46 V60" fill="none" stroke="#142535" stroke-width="5" stroke-linecap="round"/>
+          <rect x="92" y="58" width="16" height="30" rx="3" fill="#b23a2e"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section id="catalog">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Каталог</p>
+          <h2>Шесть узоров, шесть историй</h2>
+        </div>
+        <div class="filters" role="group" aria-label="Фильтр по наличию">
+          <button class="pill" data-filter="all" aria-pressed="true">Все</button>
+          <button class="pill" data-filter="in" aria-pressed="false">В наличии</button>
+          <button class="pill" data-filter="order" aria-pressed="false">Под заказ</button>
+        </div>
+      </div>
+      <div class="grid" id="catalog-grid"></div>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="wrap">
+      <p class="eyebrow">Три шага</p>
+      <h2 style="margin-bottom:18px;">Как заказать</h2>
+      <div class="steps">
+        <div class="step"><div class="num">01</div><h3 style="font-size:1.05rem;margin-block:8px 6px;">Выберите</h3><p style="color:var(--fg-muted);font-size:.9rem;margin:0;">Добавьте понравившиеся сумки в корзину — можно сразу несколько.</p></div>
+        <div class="step"><div class="num">02</div><h3 style="font-size:1.05rem;margin-block:8px 6px;">Оформите</h3><p style="color:var(--fg-muted);font-size:.9rem;margin:0;">Укажите имя, телефон и способ получения в короткой форме.</p></div>
+        <div class="step"><div class="num">03</div><h3 style="font-size:1.05rem;margin-block:8px 6px;">Отправьте</h3><p style="color:var(--fg-muted);font-size:.9rem;margin:0;">Готовый текст заказа уходит мастеру в WhatsApp или Telegram.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap about-grid">
+      <div>
+        <p class="eyebrow">Об омияге</p>
+        <h2 style="margin-bottom:12px;">お土産 — подарок из поездки</h2>
+        <p>«Омияге» по-японски означает гостинец, который привозят близким из путешествия. Так же называем и наши сумки: небольшие, стёганые, с подкладом и молнией — чтобы увезти с собой частичку japan-стиля.</p>
+        <p>Стоимость доставки не входит в сумму заказа и называется мастером при подтверждении — она зависит от города и способа получения.</p>
+      </div>
+      <ul class="ways">
+        <li>🏠 <div><strong>Самовывоз</strong><br><span style="color:var(--fg-muted);font-size:.88rem;">Забрать у мастера, адрес уточняется при подтверждении.</span></div></li>
+        <li>🚲 <div><strong>Курьер по городу</strong><br><span style="color:var(--fg-muted);font-size:.88rem;">Доставка в течение города, стоимость уточняется.</span></div></li>
+        <li>📦 <div><strong>Доставка по Казахстану</strong><br><span style="color:var(--fg-muted);font-size:.88rem;">Отправка транспортной компанией в любой город.</span></div></li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap foot-row">
+    <span>© <span id="year"></span> Омияге</span>
+    <span id="foot-contacts">Контакты появятся здесь после настройки</span>
+  </div>
+</footer>
+
+<div class="scrim" id="scrim"></div>
+<aside class="cart-panel" id="cart-panel" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+  <div class="cart-head">
+    <h2 id="cart-title">Корзина</h2>
+    <button class="icon-btn" id="cart-close" aria-label="Закрыть корзину">✕</button>
+  </div>
+  <div class="cart-body" id="cart-body"></div>
+  <div class="cart-foot" id="cart-foot"></div>
+</aside>
+
+<script>
+(function(){
+  "use strict";
+
+  // Настройки магазина — мастер меняет значения здесь.
+  var SHOP = {
+    whatsapp: "",   // например "77011234567", без плюса и пробелов
+    telegram: ""    // имя пользователя Telegram без @
+  };
+
+  var PRODUCTS = [
+    {
+      id: "seigaiha", name: "Сэйгайха", jp: "青海波", kind: "сумка",
+      pattern: "seigaiha", size: "34 × 28 × 12 см", price: 18500, stock: "in",
+      desc: "Узор «волны спокойного моря» в индиго и белом — сумка на каждый день с кожаной ручкой."
+    },
+    {
+      id: "asanoha", name: "Асаноха", jp: "麻の葉", kind: "сумка",
+      pattern: "asanoha", size: "30 × 24 × 10 см", price: 16800, stock: "order",
+      desc: "Геометрия «листа конопли» — традиционный узор-оберег для растущих детей и крепкого роста."
+    },
+    {
+      id: "patchwork", name: "Патчворк", jp: "パッチワーク", kind: "сумка",
+      pattern: "patchwork", size: "36 × 30 × 13 см", price: 21500, stock: "order",
+      desc: "Лоскутное шитьё из остатков тканей разных коллекций — у каждой сумки свой неповторимый рисунок."
+    },
+    {
+      id: "temari", name: "Тэмари", jp: "手毬", kind: "сумка",
+      pattern: "temari", size: "28 × 22 × 10 см", price: 14900, stock: "in",
+      desc: "Круглые мотивы в честь нитяных мячей тэмари — ярко, но без лишней пестроты."
+    },
+    {
+      id: "kasuri", name: "Касури", jp: "絣", kind: "сумка",
+      pattern: "kasuri", size: "32 × 26 × 11 см", price: 15500, stock: "in",
+      desc: "Размытый узор окрашенной пряжи касури — мягкий контраст индиго на светлом льне."
+    },
+    {
+      id: "sashiko", name: "Сашико", jp: "刺し子", kind: "косметичка",
+      pattern: "sashiko", size: "20 × 14 × 6 см", price: 8500, stock: "in",
+      desc: "Мешочек-косметичка со стёжкой сашико белой нитью по глубокому индиго."
+    }
+  ];
+
+  var PATTERNS = {
+    seigaiha: function(id){
+      return '<pattern id="'+id+'" width="20" height="20" patternUnits="userSpaceOnUse">'
+        + '<rect width="20" height="20" fill="#dde6ec"/>'
+        + '<path d="M0 20a20 20 0 0 1 20-20" fill="none" stroke="#28415f" stroke-width="1.6"/>'
+        + '<path d="M0 13a13 13 0 0 1 13-13" fill="none" stroke="#28415f" stroke-width="1.6"/>'
+        + '<path d="M0 6a6 6 0 0 1 6-6" fill="none" stroke="#28415f" stroke-width="1.6"/>'
+        + '</pattern>';
+    },
+    asanoha: function(id){
+      return '<pattern id="'+id+'" width="26" height="30" patternUnits="userSpaceOnUse">'
+        + '<rect width="26" height="30" fill="#e7e2d2"/>'
+        + '<g stroke="#28415f" stroke-width="1.4" fill="none">'
+        + '<path d="M13 0 L26 7.5 L26 22.5 L13 30 L0 22.5 L0 7.5 Z"/>'
+        + '<path d="M13 0 V30 M0 7.5 L26 22.5 M26 7.5 L0 22.5 M13 0 L0 7.5 M13 0 L26 7.5 M13 30 L0 22.5 M13 30 L26 22.5"/>'
+        + '</g></pattern>';
+    },
+    patchwork: function(id){
+      return '<pattern id="'+id+'" width="28" height="28" patternUnits="userSpaceOnUse">'
+        + '<rect width="14" height="14" x="0" y="0" fill="#28415f"/>'
+        + '<rect width="14" height="14" x="14" y="0" fill="#e7e2d2"/>'
+        + '<rect width="14" height="14" x="0" y="14" fill="#b23a2e"/>'
+        + '<rect width="14" height="14" x="14" y="14" fill="#dde6ec"/>'
+        + '</pattern>';
+    },
+    temari: function(id){
+      return '<pattern id="'+id+'" width="24" height="24" patternUnits="userSpaceOnUse">'
+        + '<rect width="24" height="24" fill="#e7e2d2"/>'
+        + '<circle cx="12" cy="12" r="8" fill="none" stroke="#b23a2e" stroke-width="1.6"/>'
+        + '<circle cx="12" cy="12" r="3" fill="#28415f"/>'
+        + '</pattern>';
+    },
+    kasuri: function(id){
+      return '<pattern id="'+id+'" width="18" height="18" patternUnits="userSpaceOnUse">'
+        + '<rect width="18" height="18" fill="#dde6ec"/>'
+        + '<circle cx="4" cy="4" r="1.6" fill="#28415f"/>'
+        + '<circle cx="13" cy="9" r="1.6" fill="#28415f"/>'
+        + '<circle cx="4" cy="14" r="1.6" fill="#28415f"/>'
+        + '</pattern>';
+    },
+    sashiko: function(id){
+      return '<pattern id="'+id+'" width="20" height="20" patternUnits="userSpaceOnUse">'
+        + '<rect width="20" height="20" fill="#1f3550"/>'
+        + '<path d="M0 10h20M10 0v20" stroke="#eef1f2" stroke-width="1.4"/>'
+        + '<path d="M0 0l20 20M20 0l-20 20" stroke="#eef1f2" stroke-width="0.8" opacity=".5"/>'
+        + '</pattern>';
+    }
+  };
+
+  function bagSvg(product, uid){
+    var patId = "pat-" + product.id + "-" + uid;
+    var isBag = product.kind === "сумка";
+    var patDef = PATTERNS[product.pattern](patId);
+    var body = isBag
+      ? '<path d="M34 60 Q34 34 66 34 H134 Q166 34 166 60 V146 Q166 168 142 168 H58 Q34 168 34 146 Z" fill="url(#'+patId+')" stroke="#142535" stroke-width="3"/>'
+        + '<path d="M70 60 V46 Q70 24 100 24 Q130 24 130 46 V60" fill="none" stroke="#142535" stroke-width="5" stroke-linecap="round"/>'
+        + '<rect x="92" y="58" width="16" height="30" rx="3" fill="#b23a2e"/>'
+      : '<rect x="46" y="58" width="108" height="92" rx="18" fill="url(#'+patId+')" stroke="#142535" stroke-width="3"/>'
+        + '<path d="M58 58 Q100 40 142 58" fill="none" stroke="#142535" stroke-width="4"/>'
+        + '<rect x="92" y="54" width="16" height="22" rx="3" fill="#b23a2e"/>';
+    return '<svg viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="'+product.name+'">'
+      + '<defs>' + patDef + '</defs>' + body + '</svg>';
+  }
+
+  var money = new Intl.NumberFormat('ru-RU');
+  function fmt(n){ return money.format(n) + " ₸"; }
+
+  function byId(id){ return document.getElementById(id); }
+
+  /* ---------- каталог ---------- */
+  var currentFilter = "all";
+  var catalogGrid = byId("catalog-grid");
+
+  function renderCatalog(){
+    var items = PRODUCTS.filter(function(p){
+      return currentFilter === "all" || p.stock === currentFilter;
+    });
+    if(items.length === 0){
+      catalogGrid.innerHTML = '<p class="empty-note">В этой группе пока нет изделий — посмотрите другой фильтр.</p>';
+      return;
+    }
+    catalogGrid.innerHTML = items.map(function(p, i){
+      var statusLabel = p.stock === "in" ? "В наличии" : "Под заказ";
+      var statusClass = p.stock === "in" ? "in" : "order";
+      return '<article class="card">'
+        + '<div class="card-art">' + bagSvg(p, "c"+i) + '</div>'
+        + '<div class="card-body">'
+        + '<div class="card-title"><h3>' + p.name + '</h3><span class="card-jp jp">' + p.jp + '</span></div>'
+        + '<p class="card-meta">' + p.kind + ' · ' + p.size + '</p>'
+        + '<p class="card-desc">' + p.desc + '</p>'
+        + '<span class="status ' + statusClass + '">' + statusLabel + '</span>'
+        + '<div class="card-foot">'
+        + '<span class="price">' + fmt(p.price) + '</span>'
+        + '<button class="btn primary" data-add="' + p.id + '">В корзину</button>'
+        + '</div></div></article>';
+    }).join("");
+  }
+
+  document.querySelectorAll(".pill").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      document.querySelectorAll(".pill").forEach(function(b){ b.setAttribute("aria-pressed","false"); });
+      btn.setAttribute("aria-pressed","true");
+      currentFilter = btn.getAttribute("data-filter");
+      renderCatalog();
+    });
+  });
+
+  catalogGrid.addEventListener("click", function(e){
+    var btn = e.target.closest("[data-add]");
+    if(!btn) return;
+    addToCart(btn.getAttribute("data-add"));
+    openCart();
+  });
+
+  /* ---------- корзина ---------- */
+  var cart = loadCart();
+  var step = "cart"; // cart | order | done
+  var lastOrder = null;
+  var lastFocused = null;
+
+  function loadCart(){
+    try{
+      var raw = localStorage.getItem("omiyage_cart");
+      var parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    }catch(e){ return []; }
+  }
+  function saveCart(){
+    try{ localStorage.setItem("omiyage_cart", JSON.stringify(cart)); }catch(e){}
+  }
+  function findProduct(id){
+    for(var i=0;i<PRODUCTS.length;i++){ if(PRODUCTS[i].id===id) return PRODUCTS[i]; }
+    return null;
+  }
+  function addToCart(id){
+    var line = cart.find(function(l){ return l.id===id; });
+    if(line){ line.qty = Math.min(99, line.qty+1); }
+    else{ cart.push({id:id, qty:1}); }
+    saveCart();
+    renderCart();
+  }
+  function setQty(id, qty){
+    var line = cart.find(function(l){ return l.id===id; });
+    if(!line) return;
+    line.qty = Math.max(1, Math.min(99, qty));
+    saveCart();
+    renderCart();
+  }
+  function removeLine(id){
+    cart = cart.filter(function(l){ return l.id!==id; });
+    saveCart();
+    renderCart();
+  }
+  function cartTotal(){
+    return cart.reduce(function(sum, l){
+      var p = findProduct(l.id);
+      return sum + (p ? p.price*l.qty : 0);
+    }, 0);
+  }
+  function cartCount(){
+    return cart.reduce(function(sum,l){ return sum+l.qty; }, 0);
+  }
+
+  function renderCart(){
+    byId("cart-count").textContent = cartCount();
+    var body = byId("cart-body");
+    var foot = byId("cart-foot");
+
+    if(step === "cart"){
+      if(cart.length === 0){
+        body.innerHTML = '<div class="empty-cart"><p>Корзина пуста.</p><a class="btn" href="#catalog" id="to-catalog">К каталогу</a></div>';
+        foot.innerHTML = "";
+        return;
+      }
+      body.innerHTML = cart.map(function(l, i){
+        var p = findProduct(l.id);
+        if(!p) return "";
+        return '<div class="line">'
+          + '<div class="line-art">' + bagSvg(p,"l"+i) + '</div>'
+          + '<div class="line-main">'
+          + '<div class="line-top"><span class="line-name">' + p.name + '</span><span class="line-price">' + fmt(p.price*l.qty) + '</span></div>'
+          + '<div class="line-price">' + fmt(p.price) + ' × шт.</div>'
+          + '<div class="qty">'
+          + '<button type="button" aria-label="Уменьшить количество «' + p.name + '»" data-dec="' + p.id + '">−</button>'
+          + '<span>' + l.qty + '</span>'
+          + '<button type="button" aria-label="Увеличить количество «' + p.name + '»" data-inc="' + p.id + '">+</button>'
+          + '</div>'
+          + '<button type="button" class="remove-btn" data-remove="' + p.id + '">Убрать</button>'
+          + '</div></div>';
+      }).join("");
+      foot.innerHTML = '<div class="cart-total-row"><span>Итого</span><span>' + fmt(cartTotal()) + '</span></div>'
+        + '<button class="btn primary" id="to-order">Оформить заказ</button>';
+    }
+
+    if(step === "order"){
+      body.innerHTML = renderOrderForm();
+      foot.innerHTML = '<button class="btn" id="back-to-cart">Назад в корзину</button>'
+        + '<button class="btn primary" id="submit-order" style="margin-top:8px;">Сформировать заказ</button>';
+    }
+
+    if(step === "done"){
+      body.innerHTML = renderDone();
+      foot.innerHTML = '<button class="btn link-back" id="edit-order">Изменить заказ</button>'
+        + '<button class="btn primary" id="finish-order">Готово, очистить корзину</button>';
+    }
+  }
+
+  function renderOrderForm(){
+    return ''
+      + '<div class="notice">Форма ничего не отправляет сама — вы получите готовый текст заказа и отправите его сами.</div>'
+      + '<form id="order-form" novalidate style="margin-top:14px;">'
+      + '<div class="field" id="f-name"><label for="in-name">Имя</label><input id="in-name" name="name" autocomplete="name"><span class="err">Укажите, как к вам обращаться.</span></div>'
+      + '<div class="field" id="f-phone"><label for="in-phone">Телефон</label><input id="in-phone" name="phone" autocomplete="tel" inputmode="tel"><span class="err">Нужно не меньше 10 цифр.</span></div>'
+      + '<div class="field" id="f-method"><label for="in-method">Получение</label>'
+      + '<select id="in-method" name="method">'
+      + '<option value="pickup">Самовывоз</option>'
+      + '<option value="courier">Курьер по городу</option>'
+      + '<option value="delivery">Доставка по Казахстану</option>'
+      + '</select></div>'
+      + '<div class="field" id="f-city" data-address-field><label for="in-city">Город</label><input id="in-city" name="city" autocomplete="address-level2"><span class="err">Укажите город.</span></div>'
+      + '<div class="field" id="f-address" data-address-field><label for="in-address">Адрес</label><input id="in-address" name="address" autocomplete="street-address"><span class="err">Укажите адрес доставки.</span></div>'
+      + '<div class="field"><label for="in-comment">Комментарий (необязательно)</label><textarea id="in-comment" name="comment"></textarea></div>'
+      + '</form>';
+  }
+
+  function renderDone(){
+    var o = lastOrder;
+    var actions = '';
+    if(SHOP.whatsapp){
+      actions += '<a class="btn primary" target="_blank" rel="noopener" href="https://wa.me/'+SHOP.whatsapp+'?text='+encodeURIComponent(o.text)+'">Отправить в WhatsApp</a>';
+    }
+    if(SHOP.telegram){
+      actions += '<a class="btn" target="_blank" rel="noopener" href="https://t.me/'+SHOP.telegram+'">Открыть Telegram</a>';
+    }
+    actions += '<button class="btn" id="copy-order" type="button">Скопировать текст заказа</button>';
+    actions += '<span class="copy-feedback" id="copy-feedback" aria-live="polite"></span>';
+    return ''
+      + '<div class="notice">Заказ сформирован, но ещё не отправлен — нажмите одну из кнопок ниже.</div>'
+      + '<p class="order-text" id="order-text-block" tabindex="0">' + escapeHtml(o.text) + '</p>'
+      + '<div class="result-actions">' + actions + '</div>';
+  }
+
+  function escapeHtml(s){
+    return s.replace(/[&<>]/g, function(c){ return c==='&'?'&amp;':c==='<'?'&lt;':'&gt;'; });
+  }
+
+  var orderSeq = (function(){
+    try{
+      var n = parseInt(localStorage.getItem("omiyage_order_seq") || "1000", 10);
+      return isNaN(n) ? 1000 : n;
+    }catch(e){ return 1000; }
+  })();
+  function nextOrderNumber(){
+    orderSeq += 1;
+    try{ localStorage.setItem("omiyage_order_seq", String(orderSeq)); }catch(e){}
+    return orderSeq;
+  }
+
+  var METHOD_LABELS = { pickup: "Самовывоз", courier: "Курьер по городу", delivery: "Доставка по Казахстану" };
+
+  function buildOrderText(data){
+    var lines = [];
+    lines.push("Заказ №" + data.number);
+    lines.push("Имя: " + data.name);
+    lines.push("Телефон: " + data.phone);
+    lines.push("Получение: " + METHOD_LABELS[data.method]);
+    if(data.method !== "pickup"){
+      lines.push("Город: " + data.city);
+      lines.push("Адрес: " + data.address);
+    }
+    if(data.comment){ lines.push("Комментарий: " + data.comment); }
+    lines.push("");
+    lines.push("Состав заказа:");
+    cart.forEach(function(l){
+      var p = findProduct(l.id);
+      if(!p) return;
+      lines.push(p.name + " × " + l.qty + " — " + fmt(p.price*l.qty));
+    });
+    lines.push("");
+    lines.push("Итого без доставки: " + fmt(cartTotal()));
+    return lines.join("\n");
+  }
+
+  function toggleAddressFields(){
+    var method = byId("in-method").value;
+    var show = method !== "pickup";
+    document.querySelectorAll("[data-address-field]").forEach(function(f){
+      f.style.display = show ? "" : "none";
+    });
+  }
+
+  function validateOrder(){
+    var ok = true;
+    var name = byId("in-name").value.trim();
+    var phone = byId("in-phone").value.replace(/\D/g,"");
+    var method = byId("in-method").value;
+
+    setInvalid("f-name", name.length === 0);
+    if(name.length===0) ok = false;
+
+    setInvalid("f-phone", phone.length < 10);
+    if(phone.length < 10) ok = false;
+
+    if(method !== "pickup"){
+      var city = byId("in-city").value.trim();
+      var address = byId("in-address").value.trim();
+      setInvalid("f-city", city.length===0);
+      setInvalid("f-address", address.length===0);
+      if(city.length===0) ok = false;
+      if(address.length===0) ok = false;
+    } else {
+      setInvalid("f-city", false);
+      setInvalid("f-address", false);
+    }
+    return ok;
+  }
+  function setInvalid(fieldId, invalid){
+    var el = byId(fieldId);
+    if(el) el.classList.toggle("invalid", invalid);
+  }
+
+  byId("cart-body").addEventListener("click", function(e){
+    var t = e.target;
+    if(t.id === "to-order"){ step = "order"; renderCart(); focusFirstField(); }
+    if(t.id === "back-to-cart" || t.closest && t.closest("#back-to-cart")){ step="cart"; renderCart(); }
+    if(t.id === "to-catalog"){ closeCart(); }
+    if(t.id === "edit-order"){ step = "order"; renderCart(); focusFirstField(); }
+    if(t.id === "finish-order"){
+      cart = [];
+      saveCart();
+      step = "cart";
+      lastOrder = null;
+      renderCart();
+      closeCart();
+    }
+    if(t.id === "copy-order"){ copyOrderText(); }
+    var inc = t.getAttribute && t.getAttribute("data-inc");
+    var dec = t.getAttribute && t.getAttribute("data-dec");
+    var rem = t.getAttribute && t.getAttribute("data-remove");
+    if(inc){ var l1=cart.find(function(l){return l.id===inc;}); setQty(inc, l1.qty+1); }
+    if(dec){ var l2=cart.find(function(l){return l.id===dec;}); setQty(dec, l2.qty-1); }
+    if(rem){ removeLine(rem); }
+  });
+
+  byId("cart-foot").addEventListener("click", function(e){
+    var t = e.target;
+    if(t.id === "to-order"){ step = "order"; renderCart(); focusFirstField(); }
+    if(t.id === "back-to-cart"){ step="cart"; renderCart(); }
+    if(t.id === "submit-order"){
+      if(!validateOrder()) return;
+      var data = {
+        number: lastOrder ? lastOrder.number : nextOrderNumber(),
+        name: byId("in-name").value.trim(),
+        phone: byId("in-phone").value.trim(),
+        method: byId("in-method").value,
+        city: byId("in-city").value.trim(),
+        address: byId("in-address").value.trim(),
+        comment: byId("in-comment").value.trim()
+      };
+      data.text = buildOrderText(data);
+      lastOrder = data;
+      step = "done";
+      renderCart();
+    }
+    if(t.id === "edit-order"){ step = "order"; renderCart(); focusFirstField(); }
+    if(t.id === "finish-order"){
+      cart = [];
+      saveCart();
+      step = "cart";
+      lastOrder = null;
+      renderCart();
+      closeCart();
+    }
+  });
+
+  byId("cart-body").addEventListener("change", function(e){
+    if(e.target && e.target.id === "in-method") toggleAddressFields();
+  });
+
+  function focusFirstField(){
+    setTimeout(function(){
+      toggleAddressFields();
+      var f = byId("in-name");
+      if(f) f.focus();
+    }, 0);
+  }
+
+  function copyOrderText(){
+    var text = lastOrder ? lastOrder.text : "";
+    var feedback = byId("copy-feedback");
+    function ok(){ if(feedback) feedback.textContent = "Скопировано."; }
+    function fail(){
+      var block = byId("order-text-block");
+      if(block && window.getSelection){
+        var range = document.createRange();
+        range.selectNodeContents(block);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+      if(feedback) feedback.textContent = "Текст выделен — скопируйте его вручную (Ctrl+C).";
+    }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(ok, fail);
+    } else {
+      fail();
+    }
+  }
+
+  /* ---------- открытие/закрытие панели ---------- */
+  var panel = byId("cart-panel");
+  var scrim = byId("scrim");
+
+  function openCart(){
+    lastFocused = document.activeElement;
+    panel.classList.add("open");
+    scrim.classList.add("open");
+    document.addEventListener("keydown", onKeydown);
+    setTimeout(function(){ byId("cart-close").focus(); }, 0);
+  }
+  function closeCart(){
+    panel.classList.remove("open");
+    scrim.classList.remove("open");
+    document.removeEventListener("keydown", onKeydown);
+    if(lastFocused && lastFocused.focus) lastFocused.focus();
+    else byId("cart-toggle").focus();
+  }
+  function onKeydown(e){
+    if(e.key === "Escape") closeCart();
+  }
+
+  byId("cart-toggle").addEventListener("click", openCart);
+  byId("cart-close").addEventListener("click", closeCart);
+  scrim.addEventListener("click", closeCart);
+
+  /* ---------- подвал ---------- */
+  byId("year").textContent = new Date().getFullYear();
+  (function(){
+    var bits = [];
+    if(SHOP.whatsapp) bits.push("WhatsApp: +" + SHOP.whatsapp);
+    if(SHOP.telegram) bits.push("Telegram: @" + SHOP.telegram);
+    byId("foot-contacts").textContent = bits.length ? bits.join(" · ") : "Свяжитесь с мастером через корзину";
+  })();
+
+  renderCatalog();
+  renderCart();
+})();
+</script>
